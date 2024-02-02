@@ -84,7 +84,7 @@ ax.set_ylabel(
     rotation='horizontal', y=1.02, labelpad=-40, fontsize=MEDIUM_SIZE)
 ax.set_xlabel(values_name, fontsize=BIGGER_SIZE)
 ax.legend(title=r"\underline{Reconstruction model}",
-           title_fontsize=SMALL_SIZE, loc='upper right',
+           title_fontsize=SMALL_SIZE, loc='best', bbox_to_anchor=(0.5,1.1), 
 framealpha=1., edgecolor=(0,0,0))
 isot_names = [r'$^{235}$U', r'$^{238}$U', r'$^{239}$U', r'$^{239}$Np',
                r'$^{239}$Pu', r'$^{240}$Pu', r'$^{241}$Pu', r'$^{242}$Pu', r'$^{135}$I',

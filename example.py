@@ -110,18 +110,18 @@ xs = {}
 xs["U235"] = {}
 xs["U235"]["siga"] = [1.8, 100.]
 xs["U235"]["sigf"] = [1.5, 55.]
-xs["U235"]["n0"] = 3.5 * 1e23
+xs["U235"]["n0"] = 3.5 * 1e23 
 
 xs["U238"] = {}
 xs["U238"]["siga"] = [0.35, 2.]
 xs["U238"]["n0"] = 96.5 * 1e23
 
 xs["U239"] = {}
-xs["U239"]["lambda"] = 7.25 * 1e-4
+xs["U239"]["lambda"] = 7.25 * 1e-4 * np.sqrt(2)
 xs["U239"]["n0"] = 0.
 
 xs["Np239"] = {}
-xs["Np239"]["lambda"] = 5.03 * 1e-6
+xs["Np239"]["lambda"] = 5.03 * 1e-6 * np.sqrt(2)
 xs["Np239"]["n0"] = 0.
 
 xs["Pu239"] = {}
@@ -136,7 +136,7 @@ xs["Pu240"]["n0"] = 0.
 xs["Pu241"] = {}
 xs["Pu241"]["siga"] = [2.5, 180.]
 xs["Pu241"]["sigf"] = [0.5, 140.]
-xs["Pu241"]["lambda"] = 2.11 *1e-9
+xs["Pu241"]["lambda"] = 2.11 *1e-9 * np.sqrt(2)
 xs["Pu241"]["n0"] = 0.
 
 xs["Pu242"] = {}
@@ -145,27 +145,28 @@ xs["Pu242"]["n0"] = 0.
 
 xs["I135"] = {}
 xs["I135"]["gamma"] = 0.064
-xs["I135"]["lambda"] = 4.25 *1e-5
+xs["I135"]["lambda"] = 4.25 *1e-5 * np.sqrt(2)
 xs["I135"]["n0"] = 0.
 
 xs["Xe135"] = {}
 xs["Xe135"]["siga"] = [0.0, 2. * 1e5]
-xs["Xe135"]["lambda"] = 3.03 *1e-5
+xs["Xe135"]["lambda"] = 3.03 *1e-5 * np.sqrt(2)
 xs["Xe135"]["n0"] = 0.
 
 xs["Nd149"] = {}
 xs["Nd149"]["gamma"] = 0.0109
-xs["Nd149"]["lambda"] = 1.61 *1e-4
+xs["Nd149"]["lambda"] = 1.61 *1e-4 * np.sqrt(2)
 xs["Nd149"]["n0"] = 0.
 
 xs["Pm149"] = {}
-xs["Pm149"]["lambda"] = 5.24 *1e-6
+xs["Pm149"]["lambda"] = 5.24 *1e-6 * np.sqrt(2)
 xs["Pm149"]["n0"] = 0.
 
 xs["Sm149"] = {}
 xs["Sm149"]["siga"] = [0.0, 1e-3]
 xs["Sm149"]["n0"] = 0.
-
+print(xs)
+import ipdb; ipdb.set_trace()
 for isot, xs_i in xs.items():
 
     if "siga" in xs_i.keys():
@@ -379,16 +380,16 @@ for i in range(nb_test):
         
         
         if j == 4:
-            import ipdb; ipdb.set_trace()
+            # import ipdb; ipdb.set_trace()
             fig, ax = plt.subplots(3, 1,  figsize=(8.9, 4.5*3), sharex=True)
             ax[0].plot(t/(24*60*60), n[4], label=r'$^{239}$Pu')
-            ax[0].set_ylabel(r"$n_i(t)$", fontsize=MEDIUM_SIZE)
+            ax[0].set_ylabel(r"$n_i(t)$ ($cm^{-3}$)", fontsize=MEDIUM_SIZE)
             ax[0].legend()
             ax[1].plot(t/(24*60*60), nt_dpt[4][1], label=r'$^{238}$U')
             ax[1].plot(t/(24*60*60), nt_dpt[4][2], label=r'$^{239}$U')
             ax[1].plot(t/(24*60*60), nt_dpt[4][3], label=r'$^{239}$Np')
             ax[1].plot(t/(24*60*60), nt_dpt[4][4], label=r'$^{239}$Pu')
-            ax[1].set_ylabel(r"$n_i^{\dagger}(t)$",  fontsize=MEDIUM_SIZE)
+            ax[1].set_ylabel(r"$n_i^{\dagger}(t)$ ($cm^{-3}$)",  fontsize=MEDIUM_SIZE)
             ax[1].legend()
             ax[2].plot(t/(24*60*60), ntdMn)
             ax[2].set_ylabel(r"$n_i^\dagger(t) \delta M n(t)$", fontsize=MEDIUM_SIZE)
@@ -397,8 +398,8 @@ for i in range(nb_test):
             ax[2].text(2.5, np.min(ntdMn) + (np.max(ntdMn) - np.min(ntdMn))/2., r"$\int_{t_0}^{t_f} n_i^\dagger(t) \delta M n(t) dt$",
         horizontalalignment='center', fontsize=20)
             fig.tight_layout()
-            fig.savefig(f"./ni_ni_dagger.png", dpi=600)
-            import ipdb; ipdb.set_trace()
+            fig.savefig(f"./ni_ni_dagger/ni_ni_dagger_{i}.png", dpi=600)
+            # import ipdb; ipdb.set_trace()
             
         int_ntdMn = np.trapz(ntdMn, t)
         dnf_dpt[j] = (int_ntdMn + nt_dpt[j][:, 0].dot(dn0))
