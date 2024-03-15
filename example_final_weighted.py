@@ -12,7 +12,7 @@ BIGGER_SIZE = 28
 
 plt.rc('font', size=SMALL_SIZE)          # controls default text sizes
 plt.rc('axes', titlesize=SMALL_SIZE)     # fontsize of the axes title
-plt.rc('axes', labelsize=MEDIUM_SIZE)    # fontsize of the x and y labels
+plt.rc('axes', labelsize=SMALL_SIZE)    # fontsize of the x and y labels
 plt.rc('xtick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('ytick', labelsize=SMALL_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
@@ -49,24 +49,27 @@ def getM(xs, phi):
     M[6, 5] = phi.dot(xs["Pu240"]["sigc"])
     M[6, 6] = -phi.dot(xs["Pu241"]["siga"]) - xs["Pu241"]["lambda"]
 
-    M[7, 0] = xs["I135"]["gamma"] * phi.dot(xs["U235"]["sigf"])
-    M[7, 4] = xs["I135"]["gamma"] * phi.dot(xs["Pu239"]["sigf"])
-    M[7, 6] = xs["I135"]["gamma"] * phi.dot(xs["Pu241"]["sigf"])
-    M[7, 7] = -xs["I135"]["lambda"]
+    M[7, 6] = phi.dot(xs["Pu241"]["sigc"])
+    M[7, 7] = -phi.dot(xs["Pu242"]["siga"])
 
-    M[8, 7] = xs["I135"]["lambda"] 
-    M[8, 8] = -phi.dot(xs["Xe135"]["siga"])-xs["Xe135"]["lambda"]
+    M[8, 0] = xs["I135"]["gamma"] * phi.dot(xs["U235"]["sigf"])
+    M[8, 4] = xs["I135"]["gamma"] * phi.dot(xs["Pu239"]["sigf"])
+    M[8, 6] = xs["I135"]["gamma"] * phi.dot(xs["Pu241"]["sigf"])
+    M[8, 8] = -xs["I135"]["lambda"]
 
-    M[9, 0] = xs["Nd149"]["gamma"] * phi.dot(xs["U235"]["sigf"])
-    M[9, 4] = xs["Nd149"]["gamma"] * phi.dot(xs["Pu239"]["sigf"])
-    M[9, 6] = xs["Nd149"]["gamma"] * phi.dot(xs["Pu241"]["sigf"])
-    M[9, 9] = -xs["Nd149"]["lambda"]
+    M[9, 8] = xs["I135"]["lambda"] 
+    M[9, 9] = -phi.dot(xs["Xe135"]["siga"])-xs["Xe135"]["lambda"]
 
-    M[10, 9] = xs["Nd149"]["lambda"]
-    M[10, 10] = -xs["Pm149"]["lambda"]
+    M[10, 0] = xs["Nd149"]["gamma"] * phi.dot(xs["U235"]["sigf"])
+    M[10, 4] = xs["Nd149"]["gamma"] * phi.dot(xs["Pu239"]["sigf"])
+    M[10, 6] = xs["Nd149"]["gamma"] * phi.dot(xs["Pu241"]["sigf"])
+    M[10, 10] = -xs["Nd149"]["lambda"]
 
-    M[11, 10] = xs["Pm149"]["lambda"]
-    M[11, 11] = -phi.dot(xs["Sm149"]["siga"])
+    M[11, 10] = xs["Nd149"]["lambda"]
+    M[11, 11] = -xs["Pm149"]["lambda"]
+
+    M[12, 11] = xs["Pm149"]["lambda"]
+    M[12, 12] = -phi.dot(xs["Sm149"]["siga"])
 
     return M
 
@@ -107,18 +110,18 @@ xs = {}
 xs["U235"] = {}
 xs["U235"]["siga"] = [1.8, 100.]
 xs["U235"]["sigf"] = [1.5, 55.]
-xs["U235"]["n0"] = 3.5 * 1e23
+xs["U235"]["n0"] = 3.5 * 1e23 
 
 xs["U238"] = {}
 xs["U238"]["siga"] = [0.35, 2.]
 xs["U238"]["n0"] = 96.5 * 1e23
 
 xs["U239"] = {}
-xs["U239"]["lambda"] = 7.25 * 1e-4
+xs["U239"]["lambda"] = 7.25 * 1e-4 * np.sqrt(2)
 xs["U239"]["n0"] = 0.
 
 xs["Np239"] = {}
-xs["Np239"]["lambda"] = 5.03 * 1e-6
+xs["Np239"]["lambda"] = 5.03 * 1e-6 * np.sqrt(2)
 xs["Np239"]["n0"] = 0.
 
 xs["Pu239"] = {}
@@ -133,7 +136,7 @@ xs["Pu240"]["n0"] = 0.
 xs["Pu241"] = {}
 xs["Pu241"]["siga"] = [2.5, 180.]
 xs["Pu241"]["sigf"] = [0.5, 140.]
-xs["Pu241"]["lambda"] = 2.11 *1e-9
+xs["Pu241"]["lambda"] = 2.11 *1e-9 * np.sqrt(2)
 xs["Pu241"]["n0"] = 0.
 
 xs["Pu242"] = {}
@@ -142,26 +145,27 @@ xs["Pu242"]["n0"] = 0.
 
 xs["I135"] = {}
 xs["I135"]["gamma"] = 0.064
-xs["I135"]["lambda"] = 4.25 *1e-5
+xs["I135"]["lambda"] = 4.25 *1e-5 * np.sqrt(2)
 xs["I135"]["n0"] = 0.
 
 xs["Xe135"] = {}
 xs["Xe135"]["siga"] = [0.0, 2. * 1e5]
-xs["Xe135"]["lambda"] = 3.03 *1e-5
+xs["Xe135"]["lambda"] = 3.03 *1e-5 * np.sqrt(2)
 xs["Xe135"]["n0"] = 0.
 
 xs["Nd149"] = {}
 xs["Nd149"]["gamma"] = 0.0109
-xs["Nd149"]["lambda"] = 1.61 *1e-4
+xs["Nd149"]["lambda"] = 1.61 *1e-4 * np.sqrt(2)
 xs["Nd149"]["n0"] = 0.
 
 xs["Pm149"] = {}
-xs["Pm149"]["lambda"] = 5.24 *1e-6
+xs["Pm149"]["lambda"] = 5.24 *1e-6 * np.sqrt(2)
 xs["Pm149"]["n0"] = 0.
 
 xs["Sm149"] = {}
-xs["Sm149"]["siga"] = [0.0, 1e-3]
+xs["Sm149"]["siga"] = [0.0, 1e3]
 xs["Sm149"]["n0"] = 0.
+print(xs)
 
 for isot, xs_i in xs.items():
 
@@ -184,16 +188,26 @@ t = np.linspace(t0, tf, int(tf/dt))
 # print(5*24*60*60)
 
 
-isot_list = ['U235', 'U238', 'U239', 'Np239', 'Pu239', 'Pu240', 'Pu241', 'I135', 'Xe135', 'Nd149', 'Pm149', 'Sm149'] #list(xs.keys())
+isot_list = ['U235', 'U238', 'U239', 'Np239', 'Pu239', 'Pu240', 'Pu241', 'Pu242', 'I135', 'Xe135', 'Nd149', 'Pm149', 'Sm149'] #list(xs.keys())
+weight = []
+for isot in isot_list:
+    if "siga" in xs[isot].keys():
+        weight.append((xs[isot]["siga"][0]+xs[isot]["siga"][1])**2/(xs["U238"]["siga"][0]+xs["U238"]["siga"][1])**2)
+    else:
+        weight.append(1.)
+
+    if weight[-1] > 1e4:
+        weight[-1] = 1e4
+        
+weight = np.array(weight)
+print(weight)
 
 n0 = np.zeros(len(isot_list))
 for i, isot in enumerate(isot_list):
     n0[i] = xs[isot]["n0"]
 
-
 phi = np.array([0.6667 *1e14, 0.2 *1e15])
 M = getM(xs, phi)
-
 n = np.zeros((len(isot_list), len(t)))
 # print(M.shape)   
 # print(n0.shape) 
@@ -224,7 +238,7 @@ for i, t_i in enumerate(t):
 # Calculation of the reduced basis with a range finding algorithm 
 # calculate the snapshots 
 
-s_size = 12
+s_size = 13
 trials_size = 10
 Snap = np.zeros((s_size, len(isot_list)))
 trials = []
@@ -238,16 +252,18 @@ for i in range(s_size+trials_size):
 
     nf_i =  scipy.linalg.expm(M_i*(tf-t0)).dot(n0_i)
     if i < s_size:
-        Snap[i] = nf_i
+        Snap[i] = (nf_i-n[:, -1])*weight
     else:
-        trials.append(nf_i)
+        trials.append((nf_i-n[:, -1])*weight)
 
-if os.path.exists("basis_no_pu42"):
-    npzfile = np.load("basis_no_pu42.npz")
+path = "basis_final_weighted.npz"
+re_write = True
+if os.path.exists(path) and not re_write:
+    npzfile = np.load(path)
     Snap = npzfile["Snap"]
     trials = npzfile["trials"]
 else:
-    np.savez("basis_no_pu42", Snap, trials)
+    np.savez(path, Snap, trials)
 
 
 #normalize the concentrations by the max for each isotopes 
@@ -292,10 +308,9 @@ ax.scatter(range(1, len(precisions)+1), precisions)
 ax.set_xlabel("Size of the basis")
 ax.set_ylabel("Theoretical error ($cm^{-3}$)", rotation='horizontal', y=1.05, labelpad=-130)
 ax.set_yscale('log')
-ax.xaxis.set_ticks(range(1, len(precisions)+1))
+ax.xaxis.set_ticks(range(1, len(precisions)+1)) 
 fig.tight_layout()
-fig.savefig(f"./basis_precision_no_pu42.png", dpi=600)
-
+fig.savefig(f"./basis_precision_final_weighted.png", dpi=600)
 # We try this basis of two vectors ! 
 
 Q_ = Q #Q[:12, :]
@@ -303,7 +318,7 @@ nt_rom = []
 for qi in Q_: 
     nt_i = np.zeros((len(isot_list), len(t)))
     for i, t_i in enumerate(t):
-        nt_i[:, i] = scipy.linalg.expm(-M.T*(t_i-tf))@qi
+        nt_i[:, i] = scipy.linalg.expm(-M.T*(t_i-tf))@(qi*weight)
     nt_rom.append(nt_i)
 
 nt_dpt = []
@@ -351,7 +366,7 @@ for i in range(nb_test):
         a.append(int_ntdMn + nt_rom[j][:, 0].dot(dn0))
         dnf_rom += a[-1] * qi
     
-    nf_rom = n[:, -1] + dnf_rom
+    nf_rom = n[:, -1] + dnf_rom/weight
 
     # using the rom ! 
     a = []
@@ -365,7 +380,7 @@ for i in range(nb_test):
         a.append(int_ntdMn + nt_rom[j][:, 0].dot(dn0))
         dnf_rom += a[-1] * qi
     
-    nf_rom_8 = n[:, -1] + dnf_rom
+    nf_rom_8 = n[:, -1] + dnf_rom /weight
 
 
     #using dpt
@@ -374,6 +389,29 @@ for i in range(nb_test):
         ntdMn = np.zeros(nt_dpt[j].shape[1])
         for k in range(len(ntdMn)):
             ntdMn[k] = nt_dpt[j][:, k].dot(dM.dot(n[:, k]))
+        
+        
+        # if j == 4:
+        #     # import ipdb; ipdb.set_trace()
+        #     fig, ax = plt.subplots(3, 1,  figsize=(8.9, 4.5*3), sharex=True)
+        #     ax[0].plot(t/(24*60*60), n[4], label=r'$^{239}$Pu')
+        #     ax[0].set_ylabel(r"$n_i(t)$ ($cm^{-3}$)", fontsize=MEDIUM_SIZE)
+        #     ax[0].legend()
+        #     ax[1].plot(t/(24*60*60), nt_dpt[4][1], label=r'$^{238}$U')
+        #     ax[1].plot(t/(24*60*60), nt_dpt[4][2], label=r'$^{239}$U')
+        #     ax[1].plot(t/(24*60*60), nt_dpt[4][3], label=r'$^{239}$Np')
+        #     ax[1].plot(t/(24*60*60), nt_dpt[4][4], label=r'$^{239}$Pu')
+        #     ax[1].set_ylabel(r"$n_i^{\dagger}(t)$ ($cm^{-3}$)",  fontsize=MEDIUM_SIZE)
+        #     ax[1].legend()
+        #     ax[2].plot(t/(24*60*60), ntdMn)
+        #     ax[2].set_ylabel(r"$n_i^\dagger(t) \delta M n(t)$", fontsize=MEDIUM_SIZE)
+        #     ax[2].set_xlabel("time (days)", fontsize=MEDIUM_SIZE)
+        #     ax[2].fill_between(t/(24*60*60), 0., ntdMn, alpha=0.5)
+        #     ax[2].text(2.5, np.min(ntdMn) + (np.max(ntdMn) - np.min(ntdMn))/2., r"$\int_{t_0}^{t_f} n_i^\dagger(t) \delta M n(t) dt$",
+        # horizontalalignment='center', fontsize=20)
+        #     fig.tight_layout()
+        #     fig.savefig(f"./ni_ni_dagger/ni_ni_dagger_{i}_final.png", dpi=600)
+        #     # import ipdb; ipdb.set_trace()
             
         int_ntdMn = np.trapz(ntdMn, t)
         dnf_dpt[j] = (int_ntdMn + nt_dpt[j][:, 0].dot(dn0))
@@ -391,5 +429,5 @@ for i in range(nb_test):
     errors_rom[:, i] =  100* (nf_rom-nf_i)/nf_i
     errors_rom_8[:, i] =  100* (nf_rom_8-nf_i)/nf_i
     errors_dpt[:, i] =  100* (nf_dpt-nf_i)/nf_i
-
-np.savez("errors_no_pu42", errors_rom, errors_rom_8, errors_dpt, isot_list)
+if re_write:
+    np.savez("errors_final_weighted", errors_rom, errors_rom_8, errors_dpt, isot_list)

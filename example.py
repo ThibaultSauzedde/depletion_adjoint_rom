@@ -58,7 +58,7 @@ def getM(xs, phi):
     M[8, 8] = -xs["I135"]["lambda"]
 
     M[9, 8] = xs["I135"]["lambda"] 
-    M[9, 9] = -phi.dot(xs["Xe135"]["siga"])
+    M[9, 9] = -phi.dot(xs["Xe135"]["siga"])-xs["Xe135"]["lambda"]
 
     M[10, 0] = xs["Nd149"]["gamma"] * phi.dot(xs["U235"]["sigf"])
     M[10, 4] = xs["Nd149"]["gamma"] * phi.dot(xs["Pu239"]["sigf"])
@@ -69,7 +69,7 @@ def getM(xs, phi):
     M[11, 11] = -xs["Pm149"]["lambda"]
 
     M[12, 11] = xs["Pm149"]["lambda"]
-    M[12, 12] = -phi.dot(xs["Xe135"]["siga"])
+    M[12, 12] = -phi.dot(xs["Xe135"]["siga"])  # todo: fix it, should be Sm149
 
     return M
 
@@ -163,7 +163,7 @@ xs["Pm149"]["lambda"] = 5.24 *1e-6 * np.sqrt(2)
 xs["Pm149"]["n0"] = 0.
 
 xs["Sm149"] = {}
-xs["Sm149"]["siga"] = [0.0, 1e-3]
+xs["Sm149"]["siga"] = [0.0, 1e3]
 xs["Sm149"]["n0"] = 0.
 print(xs)
 import ipdb; ipdb.set_trace()
@@ -197,7 +197,7 @@ for i, isot in enumerate(isot_list):
 
 phi = np.array([0.6667 *1e14, 0.2 *1e15])
 M = getM(xs, phi)
-
+import ipdb; ipdb.set_trace()
 n = np.zeros((len(isot_list), len(t)))
 # print(M.shape)   
 # print(n0.shape) 
@@ -230,7 +230,7 @@ for i, t_i in enumerate(t):
 
 s_size = 13
 trials_size = 10
-Snap = np.zeros((s_size, len(isot_list)))
+Snap = np.zeros((s_size, len(isot_list))) #todo: mettre des deltas plutôt !
 trials = []
 for i in range(s_size+trials_size):
     xs_i, phi_i = randomize_parameters(xs, phi)
