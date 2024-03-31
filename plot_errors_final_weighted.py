@@ -27,6 +27,8 @@ plt.rc('text.latex', preamble=r'\usepackage{xfrac}')
 
 npzfile = np.load("errors_final_weighted.npz")
 print(npzfile)
+french = True
+
 
 errors_rom = npzfile["arr_0"]
 errors_rom_8 = npzfile["arr_1"]
@@ -36,9 +38,27 @@ isot_list = npzfile["arr_3"]
 errors_rom = pd.DataFrame(errors_rom, index=isot_list)
 errors_rom_8 = pd.DataFrame(errors_rom_8, index=isot_list)
 errors_dpt = pd.DataFrame(errors_dpt, index=isot_list)
-rom_name = """Adjoint Based Reduced
+
+if french:
+    rom_name = """Modèle réduit adjoint
+    (taille = 13)"""
+    rom_name_8 = """Modèle réduit adjoint 
+    (taille = 8)"""
+    dpt_name = """Théorie des Perturbations en
+Evolution"""
+    model_title = r"\underline{Modèle}"
+    fig_path_suffix = "_fr"
+else:
+    rom_name = """Adjoint Based Reduced
 Order Model (size = 13)"""
-dpt_name = "Depletion Perturbation Theory"
+    rom_name_8 = """Adjoint Based Reduced
+    Order Model (size = 8)"""
+    dpt_name = "Depletion Perturbation Theory"
+    model_title = r"\underline{Reconstruction model}"
+    fig_path_suffix = ""
+
+
+
 value_keys = "values"
 values_name = r"$\sfrac{n_i-n_i^{ref}}{n_i^{ref}} \; (\%)$ "
 data = pd.concat([errors_rom, errors_dpt], keys=[rom_name, dpt_name])
@@ -55,7 +75,7 @@ ax.set_ylabel(
     "Isotopes",
     rotation='horizontal', y=1.02, labelpad=-40, fontsize=MEDIUM_SIZE)
 ax.set_xlabel(values_name, fontsize=BIGGER_SIZE)
-ax.legend(title=r"\underline{Reconstruction model}", title_fontsize=SMALL_SIZE,
+ax.legend(title=model_title, title_fontsize=SMALL_SIZE,
 framealpha=1., edgecolor=(0,0,0))
 isot_names = [r'$^{235}$U', r'$^{238}$U', r'$^{239}$U', r'$^{239}$Np',
                r'$^{239}$Pu', r'$^{240}$Pu', r'$^{241}$Pu', r'$^{242}$Pu', r'$^{135}$I',
@@ -63,13 +83,10 @@ isot_names = [r'$^{235}$U', r'$^{238}$U', r'$^{239}$U', r'$^{239}$Np',
 
 plt.yticks(range(len(isot_list)), isot_names)
 fig.tight_layout()
-fig.savefig(f"./error_final_weighted.png", dpi=600)
+fig.savefig(f"./error_final_weighted{fig_path_suffix}.png", dpi=600)
 
-rom_name = """Adjoint Based Reduced
-Order Model (size = 8)"""
-dpt_name = "Depletion Perturbation Theory"
-# data = pd.concat([errors_rom_8, errors_dpt], keys=[rom_name, dpt_name])
-data = pd.concat([errors_rom_8], keys=[rom_name])
+
+data = pd.concat([errors_rom_8], keys=[rom_name_8])
 
 data.columns.name = "error"
 data.index.names = ["Model", "Isotopes"]
@@ -83,7 +100,7 @@ ax.set_ylabel(
     "Isotopes",
     rotation='horizontal', y=1.02, labelpad=-40, fontsize=MEDIUM_SIZE)
 ax.set_xlabel(values_name, fontsize=BIGGER_SIZE)
-ax.legend(title=r"\underline{Reconstruction model}",
+ax.legend(title=model_title,
            title_fontsize=SMALL_SIZE, loc='best', bbox_to_anchor=(0.5,1.1), 
 framealpha=1., edgecolor=(0,0,0))
 isot_names = [r'$^{235}$U', r'$^{238}$U', r'$^{239}$U', r'$^{239}$Np',
@@ -92,4 +109,4 @@ isot_names = [r'$^{235}$U', r'$^{238}$U', r'$^{239}$U', r'$^{239}$Np',
 
 plt.yticks(range(len(isot_list)), isot_names)
 fig.tight_layout()
-fig.savefig(f"./error_rom8_final_weighted.png", dpi=600)
+fig.savefig(f"./error_rom8_final_weighted{fig_path_suffix}.png", dpi=600)

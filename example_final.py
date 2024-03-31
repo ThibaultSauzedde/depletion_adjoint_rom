@@ -246,11 +246,11 @@ for i in range(s_size+trials_size):
         trials.append(nf_i-n[:, -1])
 
 path = "basis_final.npz"
-re_write = True
+re_write = False
 if os.path.exists(path) and not re_write:
     npzfile = np.load(path)
-    Snap = npzfile["Snap"]
-    trials = npzfile["trials"]
+    Snap = npzfile["arr_0"]
+    trials = npzfile["arr_1"]
 else:
     np.savez(path, Snap, trials)
 
@@ -400,6 +400,25 @@ for i in range(nb_test):
         horizontalalignment='center', fontsize=20)
             fig.tight_layout()
             fig.savefig(f"./ni_ni_dagger/ni_ni_dagger_{i}_final.png", dpi=600)
+
+            fig, ax = plt.subplots(3, 1,  figsize=(8.9, 4.5*3), sharex=True)
+            ax[0].plot(t/(24*60*60), n[4], label=r'$^{239}$Pu')
+            ax[0].set_ylabel(r"$n_i(t)$ ($cm^{-3}$)", fontsize=MEDIUM_SIZE)
+            ax[0].legend()
+            ax[1].plot(t/(24*60*60), nt_dpt[4][1], label=r'$^{238}$U')
+            ax[1].plot(t/(24*60*60), nt_dpt[4][2], label=r'$^{239}$U')
+            ax[1].plot(t/(24*60*60), nt_dpt[4][3], label=r'$^{239}$Np')
+            ax[1].plot(t/(24*60*60), nt_dpt[4][4], label=r'$^{239}$Pu')
+            ax[1].set_ylabel(r"$n_i^{\dagger}(t)$ ($cm^{-3}$)",  fontsize=MEDIUM_SIZE)
+            ax[1].legend()
+            ax[2].plot(t/(24*60*60), ntdMn)
+            ax[2].set_ylabel(r"$n_i^\dagger(t) \delta M n(t)$", fontsize=MEDIUM_SIZE)
+            ax[2].set_xlabel("Temps (jours)", fontsize=MEDIUM_SIZE)
+            ax[2].fill_between(t/(24*60*60), 0., ntdMn, alpha=0.5)
+            ax[2].text(2.5, np.min(ntdMn) + (np.max(ntdMn) - np.min(ntdMn))/2., r"$\int_{t_0}^{t_f} n_i^\dagger(t) \delta M n(t) dt$",
+        horizontalalignment='center', fontsize=20)
+            fig.tight_layout()
+            fig.savefig(f"./ni_ni_dagger/ni_ni_dagger_{i}_final_fr.png", dpi=600)
             # import ipdb; ipdb.set_trace()
             
         int_ntdMn = np.trapz(ntdMn, t)
