@@ -5,6 +5,7 @@ import scipy.linalg
 import os 
 import seaborn as sns 
 import time
+from scipy import integrate
 
 sns.set_theme()
 SMALL_SIZE = 24
@@ -364,7 +365,7 @@ for i in range(nb_test):
         for k in range(len(ntdMn)):
             ntdMn[k] = nt_rom[j][:, k].dot(dM.dot(n[:, k]))
 
-        int_ntdMn = np.trapz(ntdMn, t)
+        int_ntdMn = integrate.simps(ntdMn, t)
         a.append(int_ntdMn + nt_rom[j][:, 0].dot(dn0))
         dnf_rom += a[-1] * qi
     
@@ -382,7 +383,7 @@ for i in range(nb_test):
         for k in range(len(ntdMn)):
             ntdMn[k] = nt_rom[j][:, k].dot(dM.dot(n[:, k]))
 
-        int_ntdMn = np.trapz(ntdMn, t)
+        int_ntdMn = integrate.simps(ntdMn, t)
         a.append(int_ntdMn + nt_rom[j][:, 0].dot(dn0))
         dnf_rom += a[-1] * qi
     
@@ -423,7 +424,7 @@ for i in range(nb_test):
         #     fig.savefig(f"./ni_ni_dagger/ni_ni_dagger_{i}.png", dpi=600)
         #     # import ipdb; ipdb.set_trace()
             
-        int_ntdMn = np.trapz(ntdMn, t)
+        int_ntdMn = integrate.simps(ntdMn, t)
         dnf_dpt[j] = (int_ntdMn + nt_dpt[j][:, 0].dot(dn0))
     
     nf_dpt = n[:, -1] + dnf_dpt
